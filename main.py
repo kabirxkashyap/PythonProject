@@ -5,7 +5,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from scipy import stats
+import statistics as st
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
@@ -35,7 +35,7 @@ if x:
     st.write(f"Median: {np.median(x): .2f}")
 
     try:
-        mode = stats.mode(x)(x)
+        mode = st.mode(x)(x)
         st.write(f"Mode: {mode: .2f}")
     except:
         st.write("Mode: No mode found (no repeating values)")
