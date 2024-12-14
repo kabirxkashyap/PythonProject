@@ -7,7 +7,7 @@ data = pd.read_csv('Main_Data.csv')
 
 # Streamlit app title
 st.title("Survey Data Analysis")
-st.subheader('By Kabir. Jessica and Rudrakshi')
+st.subheader('By Kabir, Jessica and Rudrakshi')
 
 # Plot histograms for survey answers (assuming survey answers are in specific columns)
 survey_columns = [
