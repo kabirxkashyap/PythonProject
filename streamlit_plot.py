@@ -24,7 +24,7 @@ survey_columns = [
 ]
 
 # Sidebar selection
-st.sidebar.title("Select Visualization")
+st.sidebar.title("Select any one of the following:")
 options = st.sidebar.radio("Choose one:", ["Survey Questions", "Gender Distribution", "Age Distribution"])
 
 # Survey questions visualization
