@@ -1,88 +1,59 @@
-#Statistical Calculator
-#First we will include all the libraries we need
-#We will be using Streamlit to develop the web app with full functionality
-
-import streamlit as st
 import pandas as pd
-import numpy as np
-import statistics as st
-from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
+import streamlit as st
 
-st.title('Statistical Calculator')
-st.header('By Kabir Kashyap')
+data = pd.read_csv('Main_Data.csv')
 
-#Processing Input Function
+survey_columns = [
+    '1. Are you free enough to do the things that you love?',
+    '2. Do you think that you receive adequate social support and guidance when you need it the most? ',
+    '3. Is your academic/professional life stressful?',
+    '4. Do you feel financially secured on a daily basis?',
+    '5. Do you readily express the feeling of gratitude?',
+    '6.  Do you consider yourself to be generous?',
+    '7. Do you feel that you were discriminated ever on the basis of your caste, creed, sex or race?',
+    '8. Are you satisfied with the current political scenario of the country?',
+    '9. Would you consider yourself to be mentally healthy?',
+    '10. Are you happy right now?'
+]
 
-def process_input(input_str):
-    try:
-        return list(map(float, input_str.split(',')))
-    except ValueError:
-        st.error("Please ensure all the entries are valid numbers")
-        return []
-    
-#Input Section
-st.subheader("Data Input")
-x_input = st.text_area("Enter data for variable x (Comma Seperated Values)", value = "1,2,3,4,5")
-y_input = st.text_area("Enter a list of number for Y (Comma Seperated Values, optional for regression)", value = "2,4,6,8,10")
+means = {}
+for column in survey_columns:
+    means[column] = data[column].mean()
+    plt.figure(figsize=(8, 6))
+    plt.hist(data[column], bins=5, edgecolor='black', alpha=0.7, color='coral')
+    plt.title(f'Histogram for {column} (Mean: {means[column]:.2f})')
+    plt.xlabel('Response (1-5)')
+    plt.ylabel('Frequency')
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
 
-x = process_input(x_input)
-y = process_input(y_input)
+gender_counts = data['Gender'].value_counts()
+plt.figure(figsize=(8, 6))
+plt.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=['lightblue', 'pink', 'lightgreen'])
+plt.title('Gender Distribution')
+plt.axis('equal') 
+plt.show()
 
-if x:
-    st.subheader("Measures of Central Tendency")
-    st.write(f"Mean: {np.mean(x): .2f}")
-    st.write(f"Median: {np.median(x): .2f}")
+age_counts = data['Age'].value_counts().sort_index()
+plt.figure(figsize=(8, 6))
+plt.bar(age_counts.index, age_counts.values, color='orange', edgecolor='black')
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.show()
 
-    try:
-        mode = st.mode(x)(x)
-        st.write(f"Mode: {mode: .2f}")
-    except:
-        st.write("Mode: No mode found (no repeating values)")
+mean_age = data['Age'].mean()
+print(f"Mean Age: {mean_age:.2f}")
 
-    st.subheader("Measures of Dispersion")
-    st.write(f"Range: {np.ptp(x): .2f}")
-    st.write(f"Variance: {np.var(x): .2f}")
-    st.write(f"Standard Deviaton: {np.std(x, ddof=1):.2f}")
-
-    #Plot Histogram for X
-    st.subheader("Histogram of X")
-    fig, ax = plt.subplots()
-    ax.hist(x, bins=10, color ='skyblue', edgecolor = 'black')
-    ax.set_title("Histogram of X")
-    ax.set_xlabel("values of X")
-    ax.set_ylabel('Values of Y')
-    st.pyplot(fig)
-
-    if y and len(x) == len(y):
-        #Converting to a 2D array for regression
-        x = np.array(x).reshape(-1,1)
-        y = np.array(y)
-
-        model = LinearRegression().fit(x,y)
-        slope = model.coef_[0]
-        intercept = model.intercept_
-
-        st.subheader("Linear Regression Analysis")
-        st.write(f"Equation: Y = {slope:.2f} * X + {intercept:.2f}")
-        st.write(f"Slope: {slope:.2f}")
-        st.write(f"Intercept: {intercept:.2f}")
-
-
-        #Predict Values
-        y_pred = model.predict(x)
-        st.write("Predicted Values of Y:", y_pred)
-
-        #Scatter plot with Regression
-        st.subheader("Scatter Plot of X and Y with regresion line")
-        fig, ax = plt.subplots()
-        ax.scatter(x,y, color = 'blue', label='Data Points')
-        ax.plot(x, y_pred, color='red', label = 'Regression Line')
-        ax.set_title("X vs Y with Reression Line")
-        ax.set_xlabel("X")
-        ax.set_ylabel("Y")
-        ax.legend()
-        st.pyplot(fig)
-
-    elif y and len(x) != len(y):
-        st.warning("X and Y must have the same lenght for Regression Analysis")
+all_means = list(means.values()) + [mean_age]
+labels = survey_columns + ['Mean Age']
+plt.figure(figsize=(10, 6))
+plt.barh(labels, all_means, color='teal', edgecolor='black')
+plt.title('Mean Values of Survey Questions and Age')
+plt.xlabel('Mean')
+plt.ylabel('Questions')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
