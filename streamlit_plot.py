@@ -30,6 +30,7 @@ options = st.sidebar.radio("Choose one:", ["Survey Questions", "Gender Distribut
 # Survey questions visualization
 if options == "Survey Questions":
     st.header("Survey Question Visualizations")
+    st.subheade("Select any question to visualize what the population of our survey says about")
     selected_question = st.selectbox("Select a question:", survey_columns)
     description = st.text_area("Description for the selected question:", placeholder="Enter a description here...")
     mean_value = data[selected_question].mean()
