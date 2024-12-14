@@ -6,8 +6,8 @@ import streamlit as st
 data = pd.read_csv('Main_Data.csv')
 
 # Streamlit app title
-st.title("Survey Data Analysis")
-st.subheader('By Kabir, Jessica and Rudrakshi')
+st.title("Are you Happy?")
+st.subheader('A comprehensive study of happiness among students By Kabir, Jessica and Rudrakshi')
 
 # Define survey columns
 survey_columns = [
